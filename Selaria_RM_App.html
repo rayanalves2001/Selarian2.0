@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#432716">
+<title>Selaria RM — Gestão</title>
+<style>
+:root{--brown:#432716;--brown2:#684326;--tan:#c69b68;--cream:#f5ead7;--paper:#fffaf1;--ink:#2c1b10;--muted:#806c58;--line:#dfc9aa;--green:#39734b;--blue:#356a91;--red:#9a3f31}
+*{box-sizing:border-box}body{margin:0;background:#efe2ce;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:linear-gradient(135deg,#2b190f,#684326);color:#fff3df;padding:18px 16px 14px;border-bottom:4px solid #b98b54}
+.brand{display:flex;align-items:center;gap:12px;max-width:1100px;margin:auto}.logo{width:54px;height:54px;border:2px solid #d6ad75;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:20px;color:#f5d8a8;box-shadow:inset 0 0 0 3px #432716,0 0 0 2px #9c7040}.brand h1{font-family:Georgia,serif;letter-spacing:1.5px;margin:0;font-size:24px}.brand p{margin:3px 0 0;color:#e2c7a1;font-size:12px}
+main{max-width:1100px;margin:0 auto;padding:16px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:13px;box-shadow:0 2px 6px #4b2b1110}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{font-size:22px;display:block;margin-top:5px}
+nav{display:flex;gap:7px;overflow:auto;padding:3px 0 12px;margin-bottom:8px}.tab{border:1px solid #b99a76;background:#ead8bd;color:#4a2d19;padding:10px 14px;border-radius:9px;font-weight:700;white-space:nowrap;cursor:pointer}.tab.active{background:var(--brown);color:#fff0d6;border-color:var(--brown)}
+.panel{display:none}.panel.active{display:block}.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 3px 10px #40220e0b}.heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.heading h2{font-family:Georgia,serif;margin:0;font-size:22px}.muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-weight:700;font-size:13px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbb18f;border-radius:8px;background:#fffdf8;color:var(--ink);font:inherit}textarea{min-height:78px;resize:vertical}
+button{font:inherit}.btn{border:0;border-radius:8px;background:var(--brown);color:#fff1dc;padding:10px 14px;font-weight:750;cursor:pointer}.btn:hover{filter:brightness(1.12)}.btn.secondary{background:#e9d7bd;color:#482c18;border:1px solid #c7a780}.btn.green{background:var(--green)}.btn.red{background:var(--red)}.btn.small{padding:6px 9px;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:600px}th,td{text-align:left;padding:11px 9px;border-bottom:1px solid #eadbc6;font-size:14px}th{font-size:12px;text-transform:uppercase;color:#795d40;background:#f5ead8}.empty{text-align:center;color:var(--muted);padding:28px 12px}
+.items{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:8px}.item-row{display:grid;grid-template-columns:2fr .65fr 1fr auto;gap:8px;align-items:end;padding:10px;border-bottom:1px solid #eadbc6}.item-row:last-child{border-bottom:0}.total{display:flex;justify-content:flex-end;gap:18px;align-items:center;background:#f0e0c8;padding:12px;border-radius:8px;margin-top:10px;font-weight:800}.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:11px;font-weight:800;background:#ead8bd;color:#57391e}.badge.fila{background:#dceaf4;color:#285d82}.badge.andamento{background:#ffedc8;color:#855a0b}.badge.entregue{background:#dceedd;color:#27603a}.order-card{border:1px solid var(--line);border-radius:10px;padding:13px;margin:9px 0;background:#fffdf8}.order-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.order-card h3{margin:0 0 5px;font-size:16px}.order-card p{margin:4px 0;font-size:13px}.search{max-width:340px}.hint{background:#f3e5ce;border-left:4px solid var(--tan);padding:10px 12px;border-radius:6px;font-size:13px;margin:10px 0}
+footer{text-align:center;color:#866c50;font-size:12px;padding:16px}
+@media(max-width:680px){main{padding:11px}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.item-row{grid-template-columns:1fr 1fr}.item-row .field:first-child{grid-column:1/-1}.brand h1{font-size:21px}.stat strong{font-size:20px}.card{padding:13px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">RM</div><div><h1>SELARIA RM</h1><p>TRADIÇÃO • COURO • ESTILO COUNTRY</p></div></div></header>
+<main>
+<section class="stats">
+<div class="stat"><small>Orçamentos / pedidos</small><strong id="statTotal">0</strong></div>
+<div class="stat"><small>Em andamento</small><strong id="statAndamento">0</strong></div>
+<div class="stat"><small>Na fila de entregas</small><strong id="statFila">0</strong></div>
+<div class="stat"><small>Entregues</small><strong id="statEntregues">0</strong></div>
+</section>
+<nav id="nav">
+<button class="tab active" data-tab="inicio">⌂ Início</button><button class="tab" data-tab="orcamento">＋ Novo orçamento</button><button class="tab" data-tab="clientes">♙ Clientes</button><button class="tab" data-tab="encomendas">▤ Encomendas</button><button class="tab" data-tab="fila">➜ Fila de entregas</button><button class="tab" data-tab="entregues">✓ Entregues</button>
+</nav>
+
+<section id="inicio" class="panel active">
+<div class="card"><div class="heading"><h2>Bem-vindo à Selaria RM</h2><span class="badge">Painel de controle</span></div><p>Organize seus clientes, faça orçamentos e acompanhe cada encomenda até a entrega.</p><div class="actions"><button class="btn" onclick="showTab('orcamento')">＋ Criar orçamento</button><button class="btn secondary" onclick="showTab('clientes')">Cadastrar cliente</button></div></div>
+<div class="card"><div class="heading"><h2>Pedidos recentes</h2><span class="muted">Atualizado neste aparelho</span></div><div id="recentes"></div></div>
+<div class="hint">Seus dados ficam salvos neste navegador/aparelho. Faça uma cópia de segurança regularmente; limpar os dados do navegador pode apagar os registros.</div>
+</section>
+
+<section id="orcamento" class="panel">
+<div class="card"><div class="heading"><h2 id="formTitle">Novo orçamento</h2><span class="muted">Preencha os dados do pedido</span></div>
+<form id="orderForm">
+<input type="hidden" id="editId">
+<div class="grid">
+<div class="field"><label for="clientName">Nome do cliente *</label><input id="clientName" list="clientOptions" required placeholder="Nome completo"><datalist id="clientOptions"></datalist></div>
+<div class="field"><label for="clientPhone">Telefone / WhatsApp</label><input id="clientPhone" placeholder="(64) 99999-9999" inputmode="tel"></div>
+<div class="field"><label for="orderDate">Data do orçamento *</label><input id="orderDate" type="date" required></div>
+<div class="field"><label for="dueDate">Previsão de entrega</label><input id="dueDate" type="date"></div>
+<div class="field full"><label>Produtos e serviços</label><div id="items" class="items"></div><div class="actions"><button class="btn secondary" type="button" id="addItem">＋ Adicionar item</button></div></div>
+<div class="field"><label for="deposit">Sinal / entrada (R$)</label><input id="deposit" type="number" min="0" step=".01" value="0"></div>
+<div class="field"><label for="status">Situação do pedido</label><select id="status"><option value="andamento">Em andamento</option><option value="fila">Em fila de entregas</option><option value="entregue">Entregue</option></select></div>
+<div class="field full"><label for="notes">Observações / detalhes do serviço</label><textarea id="notes" placeholder="Medidas, cor do couro, detalhes, prazo combinado..."></textarea></div>
+</div>
+<div class="total"><span>Total: <strong id="totalValue">R$ 0,00</strong></span><span>Saldo: <strong id="balanceValue">R$ 0,00</strong></span></div>
+<div class="actions"><button class="btn" type="submit">Salvar pedido</button><button class="btn secondary" type="button" id="clearForm">Limpar</button></div>
+</form></div>
+</section>
+
+<section id="clientes" class="panel">
+<div class="card"><div class="heading"><h2>Cadastro de clientes</h2><input class="search" id="clientSearch" placeholder="Buscar nome ou telefone..."></div>
+<form id="clientForm"><div class="grid"><div class="field"><label for="newClientName">Nome *</label><input id="newClientName" required placeholder="Nome do cliente"></div><div class="field"><label for="newClientPhone">Telefone / WhatsApp</label><input id="newClientPhone" inputmode="tel" placeholder="(64) 99999-9999"></div><div class="field full"><label for="newClientAddress">Endereço / cidade</label><input id="newClientAddress" placeholder="Cidade, bairro ou endereço"></div></div><div class="actions"><button class="btn" type="submit">Salvar cliente</button></div></form></div>
+<div class="card"><div class="heading"><h2>Clientes cadastrados</h2><span class="muted" id="clientCount">0 clientes</span></div><div id="clientList"></div></div>
+</section>
+
+<section id="encomendas" class="panel"><div class="card"><div class="heading"><h2>Todas as encomendas</h2><input class="search" id="orderSearch" placeholder="Buscar cliente, produto ou número..."></div><div id="allOrders"></div></div></section>
+<section id="fila" class="panel"><div class="card"><div class="heading"><h2>Fila de entregas</h2><span class="badge fila">Aguardando entrega</span></div><p class="muted">Pedidos marcados como “Em fila de entregas”.</p><div id="queueOrders"></div></div></section>
+<section id="entregues" class="panel"><div class="card"><div class="heading"><h2>Encomendas entregues</h2><span class="badge entregue">Concluídas</span></div><div id="deliveredOrders"></div></div></section>
+</main>
+<footer>Selaria RM • Gestão simples para o seu negócio country</footer>
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const today=()=>new Date().toLocaleDateString('en-CA');
+let clients=JSON.parse(localStorage.getItem('rm_clients')||'[]');
+let orders=JSON.parse(localStorage.getItem('rm_orders')||'[]');
+let nextId=Number(localStorage.getItem('rm_nextid')||1);
+function persist(){localStorage.setItem('rm_clients',JSON.stringify(clients));localStorage.setItem('rm_orders',JSON.stringify(orders));localStorage.setItem('rm_nextid',String(nextId));renderAll()}
+function showTab(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='orcamento'&&!$('orderDate').value)$('orderDate').value=today();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+function addItemRow(name='',qty=1,price=0){const row=document.createElement('div');row.className='item-row';row.innerHTML=`<div class="field"><label>Produto / serviço</label><input class="it-name" placeholder="Ex.: Arreio, cinto, conserto" value="${escapeHtml(name)}" required></div><div class="field"><label>Qtd.</label><input class="it-qty" type="number" min="1" step="1" value="${qty}" required></div><div class="field"><label>Valor unit. (R$)</label><input class="it-price" type="number" min="0" step=".01" value="${price}" required></div><button type="button" class="btn red small removeItem" aria-label="Remover item">×</button>`;$('items').appendChild(row);row.querySelectorAll('input').forEach(i=>i.addEventListener('input',calcTotal));row.querySelector('.removeItem').onclick=()=>{row.remove();calcTotal()};calcTotal()}
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getItems(){return [...document.querySelectorAll('.item-row')].map(r=>({name:r.querySelector('.it-name').value.trim(),qty:Number(r.querySelector('.it-qty').value||0),price:Number(r.querySelector('.it-price').value||0)})).filter(i=>i.name)}
+function total(items=getItems()){return items.reduce((s,i)=>s+i.qty*i.price,0)}
+function calcTotal(){let t=total(),d=Number($('deposit').value||0);$('totalValue').textContent=money(t);$('balanceValue').textContent=money(Math.max(0,t-d))}
+$('addItem').onclick=()=>addItemRow();$('deposit').addEventListener('input',calcTotal);
+function clearOrderForm(){ $('orderForm').reset();$('editId').value='';$('items').innerHTML='';addItemRow();$('orderDate').value=today();$('formTitle').textContent='Novo orçamento';calcTotal() }
+$('clearForm').onclick=clearOrderForm;
+$('orderForm').addEventListener('submit',e=>{e.preventDefault();const items=getItems();if(!items.length){alert('Adicione pelo menos um produto ou serviço.');return}const editId=$('editId').value;const existing=orders.find(o=>o.id===Number(editId));const order={id:existing?existing.id:nextId++,client:$('clientName').value.trim(),phone:$('clientPhone').value.trim(),date:$('orderDate').value,due:$('dueDate').value,status:$('status').value,items,deposit:Number($('deposit').value||0),notes:$('notes').value.trim(),updated:new Date().toISOString()};if(existing)orders=orders.map(o=>o.id===existing.id?order:o);else orders.unshift(order);if(!clients.some(c=>c.name.toLowerCase()===order.client.toLowerCase()))clients.push({id:Date.now(),name:order.client,phone:order.phone,address:''});persist();clearOrderForm();showTab('encomendas');});
+$('clientForm').addEventListener('submit',e=>{e.preventDefault();const name=$('newClientName').value.trim();if(clients.some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('Esse cliente já está cadastrado.');return}clients.push({id:Date.now(),name,phone:$('newClientPhone').value.trim(),address:$('newClientAddress').value.trim()});$('clientForm').reset();persist()});
+function statusName(s){return s==='fila'?'Em fila de entregas':s==='entregue'?'Entregue':'Em andamento'}
+function badge(s){return `<span class="badge ${s}">${statusName(s)}</span>`}
+function orderCard(o){const t=total(o.items),bal=Math.max(0,t-o.deposit);return `<article class="order-card"><div class="order-top"><div><h3>Pedido #${String(o.id).padStart(4,'0')} — ${escapeHtml(o.client)}</h3><p>${escapeHtml(o.phone||'Sem telefone')} • ${escapeHtml(o.date||'Sem data')}</p></div>${badge(o.status)}</div><p><strong>Itens:</strong> ${o.items.map(i=>`${escapeHtml(i.name)} (${i.qty} × ${money(i.price)})`).join(', ')}</p><p><strong>Total:</strong> ${money(t)} &nbsp; <strong>Sinal:</strong> ${money(o.deposit)} &nbsp; <strong>Saldo:</strong> ${money(bal)}</p><p><strong>Previsão:</strong> ${escapeHtml(o.due||'Não informada')}</p>${o.notes?`<p><strong>Observações:</strong> ${escapeHtml(o.notes)}</p>`:''}<div class="actions"><button class="btn secondary small" onclick="editOrder(${o.id})">Editar</button><button class="btn small" onclick="changeStatus(${o.id})">Mudar situação</button><button class="btn red small" onclick="deleteOrder(${o.id})">Excluir</button><button class="btn secondary small" onclick="printOrder(${o.id})">Imprimir / PDF</button></div></article>`}
+function renderOrders(){const query=($('orderSearch')?.value||'').toLowerCase();const all=orders.filter(o=>[o.client,o.phone,...o.items.map(i=>i.name),String(o.id)].join(' ').toLowerCase().includes(query));$('allOrders').innerHTML=all.length?all.map(orderCard).join(''):'<div class="empty">Nenhuma encomenda cadastrada ainda.</div>';const q=orders.filter(o=>o.status==='fila');$('queueOrders').innerHTML=q.length?q.map(orderCard).join(''):'<div class="empty">Não há pedidos na fila de entregas.</div>';const d=orders.filter(o=>o.status==='entregue');$('deliveredOrders').innerHTML=d.length?d.map(orderCard).join(''):'<div class="empty">Nenhuma encomenda entregue registrada.</div>';const r=orders.slice(0,4);$('recentes').innerHTML=r.length?r.map(orderCard).join(''):'<div class="empty">Seus pedidos recentes aparecerão aqui.</div>'}
+function renderClients(){const q=($('clientSearch').value||'').toLowerCase();const list=clients.filter(c=>(c.name+' '+c.phone+' '+c.address).toLowerCase().includes(q));$('clientCount').textContent=`${clients.length} cliente(s)`;$('clientOptions').innerHTML=clients.map(c=>`<option value="${escapeHtml(c.name)}"></option>`).join('');$('clientList').innerHTML=list.length?`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Telefone</th><th>Endereço / cidade</th><th>Ações</th></tr></thead><tbody>${list.map(c=>`<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.phone||'—')}</td><td>${escapeHtml(c.address||'—')}</td><td><button class="btn secondary small" onclick="useClient(${c.id})">Orçar</button> <button class="btn red small" onclick="deleteClient(${c.id})">Excluir</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">Nenhum cliente encontrado.</div>'}
+function renderAll(){ $('statTotal').textContent=orders.length;$('statAndamento').textContent=orders.filter(o=>o.status==='andamento').length;$('statFila').textContent=orders.filter(o=>o.status==='fila').length;$('statEntregues').textContent=orders.filter(o=>o.status==='entregue').length;renderClients();renderOrders()}
+function useClient(id){const c=clients.find(c=>c.id===id);if(!c)return;clearOrderForm();$('clientName').value=c.name;$('clientPhone').value=c.phone||'';showTab('orcamento')}
+function editOrder(id){const o=orders.find(o=>o.id===id);if(!o)return;clearOrderForm();$('editId').value=o.id;$('clientName').value=o.client;$('clientPhone').value=o.phone;$('orderDate').value=o.date;$('dueDate').value=o.due;$('deposit').value=o.deposit;$('status').value=o.status;$('notes').value=o.notes;$('items').innerHTML='';o.items.forEach(i=>addItemRow(i.name,i.qty,i.price));$('formTitle').textContent='Editar pedido #'+String(o.id).padStart(4,'0');showTab('orcamento')}
+function changeStatus(id){const o=orders.find(o=>o.id===id);if(!o)return;const options=['andamento','fila','entregue'];const current=options.indexOf(o.status);o.status=options[(current+1)%options.length];persist()}
+function deleteOrder(id){if(confirm('Excluir este pedido? Essa ação não pode ser desfeita.')){orders=orders.filter(o=>o.id!==id);persist()}}
+function deleteClient(id){if(confirm('Excluir este cliente? Os pedidos existentes serão mantidos.')){clients=clients.filter(c=>c.id!==id);persist()}}
+function printOrder(id){const o=orders.find(o=>o.id===id);if(!o)return;const w=window.open('','_blank');if(!w){alert('Permita abrir janelas para imprimir o orçamento.');return}const t=total(o.items);w.document.write(`<html><head><title>Orçamento Selaria RM</title><style>body{font-family:Arial;padding:28px;color:#321f12}h1{color:#684326}table{width:100%;border-collapse:collapse}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}.right{text-align:right}</style></head><body><h1>SELARIA RM</h1><p>Orçamento / Pedido #${String(o.id).padStart(4,'0')}</p><hr><p><b>Cliente:</b> ${escapeHtml(o.client)}<br><b>Telefone:</b> ${escapeHtml(o.phone||'—')}<br><b>Data:</b> ${escapeHtml(o.date||'—')}<br><b>Previsão de entrega:</b> ${escapeHtml(o.due||'—')}</p><table><thead><tr><th>Produto / serviço</th><th>Qtd.</th><th>Unitário</th><th>Total</th></tr></thead><tbody>${o.items.map(i=>`<tr><td>${escapeHtml(i.name)}</td><td>${i.qty}</td><td>${money(i.price)}</td><td>${money(i.qty*i.price)}</td></tr>`).join('')}</tbody></table><h3>Total: ${money(t)}</h3><p>Sinal: ${money(o.deposit)}<br>Saldo: ${money(Math.max(0,t-o.deposit))}</p><p><b>Situação:</b> ${statusName(o.status)}</p><p><b>Observações:</b> ${escapeHtml(o.notes||'—')}</p><br><p>Assinatura: ____________________________________</p><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close()}
+$('clientSearch').addEventListener('input',renderClients);$('orderSearch').addEventListener('input',renderOrders);
+$('clientName').addEventListener('change',()=>{const c=clients.find(c=>c.name.toLowerCase()===$('clientName').value.trim().toLowerCase());if(c)$('clientPhone').value=c.phone||''});
+clearOrderForm();renderAll();
+</script>
+</body></html>
